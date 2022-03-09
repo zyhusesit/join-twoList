@@ -1,27 +1,25 @@
-
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
-typedef struct node {
+struct List {
     int data;
-    struct node *next;
-} List;
+    List *next = nullptr;
+};
 
 void getlistA(List *A, int n);//创建包含N个随机数的链表
 void getlistB(List *B, int n);//创建包含N个随机数的链表
 void showList(List *A);//显示链表内容
 void deleteList(List *A);//销毁链表
 void insertData(List *A, int x);//有序链表中插入包含数据x的节点
-void insertData_reverse(List *A, int x);//有序链表中插入包含数据x的节点
-void mergelist(List *A, List *B);//合并A与B，结果存于A中，使得A逆向有序且无重复元素。
+void insertData_reverse(List *B, int x);//有序链表中插入包含数据x的节点
+void mergeList(List *A, List *B);//合并A与B，结果存于A中，使得A逆向有序且无重复元素。
 
 int main() {
+    List *A = new List;
+    List *B = new List;
     int n, m;
-    List *A, *B;
-    A = new List;
-    B = new List;
-    A->next = B->next = nullptr;
     cout << "请输入链表A的数据规模n：" << endl;
     cin >> n;
     cout << "请输入链表B的数据规模m：" << endl;
@@ -35,9 +33,9 @@ int main() {
         cout << "链表B:" << endl;
         showList(B);//显示B的源数据
 
-        cout << "将链表A与B合并后：";
+        cout << "将链表A与B合并后：" << endl;
 
-        mergelist(A, B);//将A与B合并，结果存于A，A逆向有序
+        mergeList(A, B);//将A与B合并，结果存于A，A逆向有序
         cout << "链表A:" << endl;
         showList(A);//显示处理后的链表A
 
@@ -67,35 +65,42 @@ void getlistB(List *B, int n) {
 }
 
 void showList(List *A) {
-    List *p = A->next;
-    if (!p) {
+    if (A->next == nullptr) {
         cout << "链表为空" << endl;
         return;
     }
+    List *p = A->next;
     while (p) {
-        printf("%3d", p->data);
+        cout << setw(3) << p->data;
         p = p->next;
     }
-    printf("\n");
+    cout << endl;
 }
 
 void deleteList(List *A) {
-    List *p, *p2;
+    List *p, *p1;
     p = A->next;
-    A->next = nullptr;
+    delete A;
     while (p) {
-        p2 = p->next;
+        p1 = p->next;
         delete p;
-        p = p2;
+        p = p1;
     }
 }
 
 void insertData(List *A, int x) {
-    List *p2, *p1, *q;
+    if (A->next == nullptr) {
+        List *p = new List;
+        p->data = x;
+        A->next = p;
+        return;
+    }
+
+    List *p2, *p1;
     p1 = A;
     p2 = p1->next;
     while (p2) {
-        if (p2->data > x)
+        if (x < p2->data)
             break;
         else if (p2->data == x)
             return;
@@ -104,18 +109,25 @@ void insertData(List *A, int x) {
             p2 = p2->next;
         }
     }
-    q = new List;
+    List *q = new List;
     q->data = x;
     p1->next = q;
     q->next = p2;
 }
 
-void insertData_reverse(List *A, int x) {
-    List *p2, *p1, *q;
-    p1 = A;
+void insertData_reverse(List *B, int x) {
+    if (B->next == nullptr) {
+        List *p = new List;
+        p->data = x;
+        B->next = p;
+        return;
+    }
+
+    List *p2, *p1;
+    p1 = B;
     p2 = p1->next;
     while (p2) {
-        if (p2->data < x)
+        if (x > p2->data)
             break;
         else if (p2->data == x)
             return;
@@ -124,12 +136,13 @@ void insertData_reverse(List *A, int x) {
             p2 = p2->next;
         }
     }
-    q = new List;
+    List *q = new List;
     q->data = x;
     p1->next = q;
     q->next = p2;
 }
 
-void mergelist(List *A, List *B) {
+
+void mergeList(List *A, List *B) {
 
 }
