@@ -4,7 +4,7 @@
 using namespace std;
 
 struct List {
-    int data;
+    int data{};
     List *next = nullptr;
 };
 
